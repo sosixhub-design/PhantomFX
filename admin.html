@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PHANTOM HUB — Admin</title>
+<title>PhantomFX — Admin</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -22,22 +22,10 @@
     border-bottom:1px solid #2a2a2a;
   }
 
-  header .brand {
-    font-weight:bold;
-    font-size:18px;
-    letter-spacing:0.04em;
-  }
+  header .brand { font-weight:bold; font-size:18px; letter-spacing:0.04em; }
+  header .brand span { color:#999999; font-weight:normal; }
 
-  header .brand span {
-    color:#999999;
-    font-weight:normal;
-  }
-
-  main {
-    max-width:900px;
-    margin:0 auto;
-    padding:30px 20px;
-  }
+  main { max-width:900px; margin:0 auto; padding:30px 20px; }
 
   #loginBox {
     max-width:340px;
@@ -47,10 +35,7 @@
     padding:24px;
   }
 
-  #loginBox h2 {
-    margin-bottom:16px;
-    font-size:16px;
-  }
+  #loginBox h2 { margin-bottom:16px; font-size:16px; }
 
   .field { margin-bottom:14px; }
 
@@ -61,7 +46,10 @@
     margin-bottom:4px;
   }
 
-  .field input {
+  .field input[type="text"],
+  .field input[type="password"],
+  .field input[type="number"],
+  .field select {
     width:100%;
     background:#000000;
     color:#ffffff;
@@ -71,6 +59,8 @@
     font-size:13px;
     outline:none;
   }
+
+  .field select option { background:#000000; }
 
   button.primary {
     width:100%;
@@ -85,13 +75,9 @@
   }
 
   button.primary:hover { background:#cccccc; }
+  button.primary:disabled { background:#555555; cursor:not-allowed; }
 
-  #statusMsg {
-    font-size:12px;
-    color:#ff5555;
-    margin-top:10px;
-    min-height:14px;
-  }
+  #statusMsg { font-size:12px; color:#ff5555; margin-top:10px; min-height:14px; }
 
   #dashboard { display:none; }
 
@@ -116,25 +102,61 @@
 
   .toolbar button:hover { background:#ffffff; color:#000000; }
 
-  table {
-    width:100%;
-    border-collapse:collapse;
-    font-size:13px;
+  .panel {
+    border:1px solid #2a2a2a;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:24px;
   }
 
-  th, td {
-    text-align:left;
-    padding:10px 8px;
-    border-bottom:1px solid #2a2a2a;
-  }
+  .panel h3 { font-size:14px; margin-bottom:16px; }
 
-  th {
+  .thumb-drop {
+    border:2px dashed #ffffff;
+    border-radius:8px;
+    padding:14px;
+    text-align:center;
+    cursor:pointer;
+    font-size:12px;
     color:#999999;
-    font-weight:normal;
-    font-size:11px;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
   }
+
+  .thumb-drop:hover { background:#111111; }
+
+  .thumb-preview {
+    width:100%;
+    max-height:160px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid #ffffff;
+    margin-top:10px;
+    display:none;
+  }
+
+  .effect-desc {
+    font-size:12px;
+    color:#999999;
+    margin:-6px 0 14px;
+  }
+
+  #paramFields { margin-bottom:14px; }
+
+  .param-cfg-row {
+    display:grid;
+    grid-template-columns: 1fr 70px 70px 70px;
+    gap:8px;
+    align-items:center;
+    margin-bottom:8px;
+    font-size:12px;
+  }
+
+  .param-cfg-row span { color:#999999; }
+  .param-cfg-row input { padding:6px; font-size:12px; }
+  .param-cfg-row .cfg-color { padding:2px; height:30px; }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #2a2a2a; }
+  th { color:#999999; font-weight:normal; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; }
 
   .badge {
     display:inline-block;
@@ -144,17 +166,7 @@
     border:1px solid #ffffff;
   }
 
-  .badge.banned {
-    border-color:#ff5555;
-    color:#ff5555;
-  }
-
-  .badge.active {
-    border-color:#ffffff;
-    color:#ffffff;
-  }
-
-  .ban-btn {
+  .del-btn {
     background:none;
     border:1px solid #ff5555;
     color:#ff5555;
@@ -164,32 +176,22 @@
     cursor:pointer;
   }
 
-  .ban-btn:hover { background:#ff5555; color:#000000; }
+  .del-btn:hover { background:#ff5555; color:#000000; }
 
-  .unban-btn {
-    background:none;
-    border:1px solid #ffffff;
-    color:#ffffff;
-    border-radius:6px;
-    padding:5px 10px;
-    font-size:11px;
-    cursor:pointer;
+  .empty-msg { text-align:center; color:#999999; padding:30px 0; font-size:13px; }
+
+  .thumb-td { width:44px; }
+  .thumb-td img, .thumb-td .thumb-blank {
+    width:36px; height:36px; border-radius:6px; object-fit:cover;
+    border:1px solid #333333; display:block;
   }
-
-  .unban-btn:hover { background:#ffffff; color:#000000; }
-
-  .empty-msg {
-    text-align:center;
-    color:#999999;
-    padding:30px 0;
-    font-size:13px;
-  }
+  .thumb-td .thumb-blank { background:#111111; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">PHANTOM HUB <span>· Admin</span></div>
+  <div class="brand">PhantomFX <span>· Admin</span></div>
 </header>
 
 <main>
@@ -206,64 +208,97 @@
 
   <div id="dashboard">
     <div class="toolbar">
-      <h2>Verified Accounts</h2>
-      <div style="display:flex; gap:8px;">
-        <button onclick="loadAccounts()">Refresh</button>
-        <button onclick="adminLogout()">Log Out</button>
+      <h2>Upload Manager</h2>
+      <button onclick="adminLogout()">Log Out</button>
+    </div>
+
+    <!-- Upload / create panel. Note there's no raw code/script field here on
+         purpose — admin picks a coded Effect Type and just sets the default
+         ranges. The actual effect logic lives in effects.js, never here. -->
+    <div class="panel">
+      <h3>Upload New Item</h3>
+
+      <div class="field">
+        <label>Title</label>
+        <input type="text" id="fTitle" placeholder="e.g. Muzzle Flash Pack">
       </div>
+
+      <div class="field">
+        <label>Category</label>
+        <select id="fCategory" onchange="onCategoryChange()">
+          <option value="assets">Assets (image)</option>
+          <option value="sfx">SFX (sound)</option>
+          <option value="packs" disabled>Packs — coming soon</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Thumbnail</label>
+        <div class="thumb-drop" onclick="document.getElementById('fThumbFile').click()">
+          Click to choose a thumbnail image
+        </div>
+        <input type="file" id="fThumbFile" accept="image/*" style="display:none" onchange="onThumbPicked(event)">
+        <img id="thumbPreview" class="thumb-preview">
+      </div>
+
+      <div class="field">
+        <label>Effect Type</label>
+        <select id="fEffectType" onchange="onEffectTypeChange()"></select>
+      </div>
+      <div class="effect-desc" id="effectDesc"></div>
+
+      <label style="display:block; font-size:12px; color:#999999; margin-bottom:8px;">Default settings visitors will see</label>
+      <div id="paramFields"></div>
+
+      <div id="uploadStatus" style="font-size:12px; color:#999999; margin:8px 0; min-height:14px;"></div>
+      <button class="primary" onclick="submitUpload()">Add Item</button>
+    </div>
+
+    <div class="toolbar">
+      <h2>Existing Items</h2>
+      <button onclick="loadItems()">Refresh</button>
     </div>
 
     <table>
       <thead>
-        <tr>
-          <th>Roblox Username</th>
-          <th>Roblox ID</th>
-          <th>Verified</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
+        <tr><th></th><th>Title</th><th>Category</th><th>Effect</th><th></th></tr>
       </thead>
-      <tbody id="accountsBody"></tbody>
+      <tbody id="itemsBody"></tbody>
     </table>
-    <div id="emptyMsg" class="empty-msg" style="display:none;">No verified accounts yet.</div>
+    <div id="emptyMsg" class="empty-msg" style="display:none;">No items uploaded yet.</div>
   </div>
 
 </main>
 
+<script src="effects.js"></script>
+<script src="store.js"></script>
 <script>
-  // Set this to your deployed Worker URL — same one used in index.html.
-  const API_BASE = 'https://phantom-hub.sosixhub.workers.dev';
+  // NOTE: this admin key check is client-side only, which is fine for
+  // keeping this page out of casual view but is NOT real security — anyone
+  // who reads this file's source can find/bypass it. Once you have a
+  // Cloudflare Worker, move this check server-side (the Worker verifies
+  // the key on every /api/admin/* request instead of trusting the browser).
+  const ADMIN_KEY = 'changeme';
 
-  let adminToken = sessionStorage.getItem('phantom_admin_token') || null;
+  let adminUnlocked = sessionStorage.getItem('phantom_admin_unlocked') === '1';
+  let pendingThumbDataUrl = '';
 
   function setStatus(msg) {
     document.getElementById('statusMsg').textContent = msg || '';
   }
 
-  async function adminLogin() {
+  function adminLogin() {
     const key = document.getElementById('adminKeyInput').value.trim();
     if (!key) { setStatus('Enter the admin key.'); return; }
-    setStatus('Checking...');
-    try {
-      const res = await fetch(API_BASE + '/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ adminKey: key })
-      });
-      const data = await res.json();
-      if (!res.ok) { setStatus(data.error || 'Login failed.'); return; }
-
-      adminToken = data.token;
-      sessionStorage.setItem('phantom_admin_token', adminToken);
-      showDashboard();
-    } catch (e) {
-      setStatus('Network error — try again.');
-    }
+    if (key !== ADMIN_KEY) { setStatus('Wrong key.'); return; }
+    adminUnlocked = true;
+    sessionStorage.setItem('phantom_admin_unlocked', '1');
+    showDashboard();
   }
 
   function adminLogout() {
-    adminToken = null;
-    sessionStorage.removeItem('phantom_admin_token');
+    adminUnlocked = false;
+    sessionStorage.removeItem('phantom_admin_unlocked');
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('loginBox').style.display = 'block';
     document.getElementById('adminKeyInput').value = '';
@@ -272,72 +307,161 @@
   function showDashboard() {
     document.getElementById('loginBox').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    loadAccounts();
+    populateEffectTypeOptions();
+    onEffectTypeChange();
+    loadItems();
   }
 
-  async function loadAccounts() {
-    try {
-      const res = await fetch(API_BASE + '/api/admin/accounts', {
-        headers: { 'Authorization': 'Bearer ' + adminToken }
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        if (res.status === 401) adminLogout();
-        return;
+  function effectTypesForCategory(category) {
+    const kind = category === 'sfx' ? 'audio' : 'image';
+    return Object.entries(EFFECT_TYPES).filter(([, def]) => def.kind === kind);
+  }
+
+  function onCategoryChange() {
+    populateEffectTypeOptions();
+    onEffectTypeChange();
+  }
+
+  function populateEffectTypeOptions() {
+    const category = document.getElementById('fCategory').value;
+    const sel = document.getElementById('fEffectType');
+    sel.innerHTML = effectTypesForCategory(category)
+      .map(([key, def]) => `<option value="${key}">${escapeHtml(def.label)}</option>`)
+      .join('');
+  }
+
+  function onEffectTypeChange() {
+    const key = document.getElementById('fEffectType').value;
+    const def = EFFECT_TYPES[key];
+    document.getElementById('effectDesc').textContent = def ? def.description : '';
+    renderParamFields(def);
+  }
+
+  // Lets the admin set the default value (and min/max for sliders) that
+  // visitors will see for each param — no code involved.
+  function renderParamFields(def) {
+    const container = document.getElementById('paramFields');
+    if (!def) { container.innerHTML = ''; return; }
+    container.innerHTML = def.params.map(p => {
+      if (p.type === 'color') {
+        return `<div class="param-cfg-row">
+          <span>${escapeHtml(p.label)}</span>
+          <input type="color" class="cfg-color" data-key="${p.key}" data-kind="color" value="${p.default}">
+          <span></span><span></span>
+        </div>`;
       }
-      renderAccounts(data.accounts || []);
-    } catch (e) {
-      // Worker unreachable — leave table as-is
-    }
+      if (p.type === 'toggle') {
+        return `<div class="param-cfg-row">
+          <span>${escapeHtml(p.label)}</span>
+          <input type="checkbox" data-key="${p.key}" data-kind="toggle" ${p.default ? 'checked' : ''}>
+          <span></span><span></span>
+        </div>`;
+      }
+      return `<div class="param-cfg-row">
+        <span>${escapeHtml(p.label)}</span>
+        <input type="number" data-key="${p.key}" data-kind="min" placeholder="min" value="${p.min}">
+        <input type="number" data-key="${p.key}" data-kind="max" placeholder="max" value="${p.max}">
+        <input type="number" data-key="${p.key}" data-kind="default" placeholder="default" value="${p.default}">
+      </div>`;
+    }).join('');
   }
 
-  function renderAccounts(accounts) {
-    const body = document.getElementById('accountsBody');
-    const emptyMsg = document.getElementById('emptyMsg');
+  function collectParamConfig(def) {
+    const container = document.getElementById('paramFields');
+    const params = def.params.map(p => {
+      const out = { key: p.key, label: p.label, type: p.type };
+      if (p.type === 'color') {
+        out.default = container.querySelector(`[data-key="${p.key}"][data-kind="color"]`).value;
+      } else if (p.type === 'toggle') {
+        out.default = container.querySelector(`[data-key="${p.key}"][data-kind="toggle"]`).checked;
+      } else {
+        out.min = Number(container.querySelector(`[data-key="${p.key}"][data-kind="min"]`).value);
+        out.max = Number(container.querySelector(`[data-key="${p.key}"][data-kind="max"]`).value);
+        out.default = Number(container.querySelector(`[data-key="${p.key}"][data-kind="default"]`).value);
+        if (p.step) out.step = p.step;
+      }
+      return out;
+    });
+    const values = {};
+    params.forEach(p => { values[p.key] = p.default; });
+    return values;
+  }
 
-    if (accounts.length === 0) {
+  function onThumbPicked(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      pendingThumbDataUrl = reader.result; // small demo thumbnails only —
+      // swap for an R2 upload (see store.js header) once the Worker exists
+      const preview = document.getElementById('thumbPreview');
+      preview.src = pendingThumbDataUrl;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function submitUpload() {
+    const title = document.getElementById('fTitle').value.trim();
+    const category = document.getElementById('fCategory').value;
+    const effectKey = document.getElementById('fEffectType').value;
+    const def = EFFECT_TYPES[effectKey];
+    const statusEl = document.getElementById('uploadStatus');
+
+    if (!title) { statusEl.textContent = 'Enter a title first.'; return; }
+    if (!def) { statusEl.textContent = 'Pick an effect type.'; return; }
+
+    const item = {
+      id: Date.now(),
+      category,
+      title,
+      username: 'you',
+      type: 'Free',
+      views: 0,
+      thumbnail: pendingThumbDataUrl,
+      effectType: effectKey,
+      params: collectParamConfig(def)
+    };
+
+    PhantomStore.saveItem(item);
+    statusEl.textContent = 'Added.';
+    document.getElementById('fTitle').value = '';
+    document.getElementById('fThumbFile').value = '';
+    document.getElementById('thumbPreview').style.display = 'none';
+    pendingThumbDataUrl = '';
+    loadItems();
+  }
+
+  function loadItems() {
+    renderItems(PhantomStore.getItems());
+  }
+
+  function renderItems(items) {
+    const body = document.getElementById('itemsBody');
+    const emptyMsg = document.getElementById('emptyMsg');
+    if (items.length === 0) {
       body.innerHTML = '';
       emptyMsg.style.display = 'block';
       return;
     }
     emptyMsg.style.display = 'none';
-
-    accounts.sort((a, b) => b.createdAt - a.createdAt);
-
-    body.innerHTML = accounts.map(acc => `
+    body.innerHTML = items.map(it => `
       <tr>
-        <td>@${escapeHtml(acc.robloxUsername)}</td>
-        <td>${acc.robloxId}</td>
-        <td>${new Date(acc.createdAt).toLocaleDateString()}</td>
-        <td><span class="badge ${acc.banned ? 'banned' : 'active'}">${acc.banned ? 'Banned' : 'Active'}</span></td>
-        <td>
-          ${acc.banned
-            ? `<button class="unban-btn" onclick="toggleBan(${acc.robloxId}, false)">Unban</button>`
-            : `<button class="ban-btn" onclick="toggleBan(${acc.robloxId}, true)">Ban</button>`
-          }
-        </td>
+        <td class="thumb-td">${it.thumbnail ? `<img src="${it.thumbnail}">` : '<div class="thumb-blank"></div>'}</td>
+        <td>${escapeHtml(it.title)}</td>
+        <td><span class="badge">${it.category}</span></td>
+        <td>${escapeHtml(EFFECT_TYPES[it.effectType] ? EFFECT_TYPES[it.effectType].label : it.effectType)}</td>
+        <td><button class="del-btn" onclick="removeItem(${it.id})">Delete</button></td>
       </tr>
     `).join('');
   }
 
-  async function toggleBan(robloxId, banned) {
-    try {
-      const res = await fetch(API_BASE + '/api/admin/ban', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminToken },
-        body: JSON.stringify({ robloxId, banned })
-      });
-      if (res.ok) loadAccounts();
-    } catch (e) {}
+  function removeItem(id) {
+    PhantomStore.deleteItem(id);
+    loadItems();
   }
 
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  if (adminToken) showDashboard();
+  if (adminUnlocked) showDashboard();
 </script>
 
 </body>
